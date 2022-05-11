@@ -41,5 +41,10 @@ public class TodoService {
         }
     }
 
+    // 리스트 불러오기
+    public List<TodoEntity> retrieve(final String userId){
+        return todoRepository.findByUserId(userId);
+    }
+
 
 }
