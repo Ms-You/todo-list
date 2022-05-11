@@ -55,6 +55,22 @@ public class TodoService {
     }
 
 
+    // 리스트 삭제
+    public List<TodoEntity> delete(final TodoEntity entity){
+        validate(entity);
+
+        try{
+            // 엔티티 삭제
+            todoRepository.delete(entity);
+
+        } catch (Exception e){
+            log.error("엔티티 삭제 에러 ", entity.getId(), e);
+            throw new RuntimeException("엔티티 삭제 에러 " + entity.getId());
+        }
+
+        return retrieve(entity.getUserId());
+    }
+
     private void validate(TodoEntity entity) {
         if (entity == null){
             log.warn("엔티티가 null");
