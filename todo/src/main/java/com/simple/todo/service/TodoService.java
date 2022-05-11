@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +30,31 @@ public class TodoService {
         return todoRepository.findByUserId(entity.getUserId());
     }
 
+
+    // 리스트 불러오기
+    public List<TodoEntity> retrieve(final String userId){
+        return todoRepository.findByUserId(userId);
+    }
+
+
+    // 리스트 수정
+    public List<TodoEntity> update(final TodoEntity entity){
+        validate(entity);
+
+        final Optional<TodoEntity> original = todoRepository.findById(entity.getId());
+
+        original.ifPresent(todo -> {
+            // 값이 존재하면 update
+            todo.setTitle(entity.getTitle());
+            todo.setDone((entity.isDone()));
+
+            todoRepository.save(todo);
+        });
+
+        return retrieve(entity.getUserId());
+    }
+
+
     private void validate(TodoEntity entity) {
         if (entity == null){
             log.warn("엔티티가 null");
@@ -40,11 +66,5 @@ public class TodoService {
             throw new RuntimeException("알 수 없는 사용자입니다.");
         }
     }
-
-    // 리스트 불러오기
-    public List<TodoEntity> retrieve(final String userId){
-        return todoRepository.findByUserId(userId);
-    }
-
 
 }
