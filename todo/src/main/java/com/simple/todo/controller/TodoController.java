@@ -106,7 +106,7 @@ public class TodoController {
         } catch (Exception e){
             String error = e.getMessage();
             ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
-            
+
             return ResponseEntity.badRequest().body(response);
         }
     }
