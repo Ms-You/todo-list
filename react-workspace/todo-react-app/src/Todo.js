@@ -7,12 +7,13 @@ class Todo extends React.Component {
         super(props);   // props 오브젝트 초기화
         this.state = { item: props.item, readOnly: true };
         this.delete = props.delete;
+        this.update = props.update;
     }
 
     // 삭제처리 핸들러 추가
     deleteEventHandler = () => {
         this.delete(this.state.item);
-    }
+    };
 
     // Todo 변경 가능 여부 함수 추가
     offReadOnlyMode = () => {
@@ -20,28 +21,30 @@ class Todo extends React.Component {
         this.setState({ readOnly: false }, () => {
             console.log("ReadOnly? ", this.state.readOnly);
         });
-    }
+    };
 
     // Todo 변경 가능 여부 엔터 처리 핸들러 추가
     enterKeyEventHandler = (e) => {
         if (e.key === "Enter") {
             this.setState({ readOnly: true });
+            this.update(this.state.item);
         }
-    }
+    };
 
     // 편집 처리 이벤트핸들러
     editEventHandler = (e) => {
         const thisItem = this.state.item;
         thisItem.title = e.target.value;
         this.setState({ item: thisItem });
-    }
+    };
 
     // 체크박스 변경 처리 핸들러
     checkboxEventHandler = (e) => {
         const thisItem = this.state.item;
         thisItem.done = !thisItem.done;
         this.setState({ item: thisItem });
-    }
+        this.update(this.state.item);
+    };
 
 
     render() {

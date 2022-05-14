@@ -3,6 +3,7 @@ import Todo from './Todo';
 import AddTodo from './AddTodo.js';
 import './App.css';
 import React from 'react';
+import { call } from "./service/ApiService";
 
 class App extends React.Component {
   constructor(props) {
@@ -12,25 +13,33 @@ class App extends React.Component {
     };
   }
 
+  // componentDidMount 추가
+  componentDidMount() {
+    call("/todo", "GET", null).then((response) =>
+      this.setState({ items: response.data })
+    );
+  };
+
   // add 함수 추가
   add = (item) => {
-    const thisItems = this.state.items;
-    item.id = "ID-" + thisItems.length;
-    item.done = false;  // done 초기화
-    thisItems.push(item);
-    this.setState({ items: thisItems });
-    console.log("items : ", this.state.items);
-  }
+    call("/todo", "POST", item).then((response) =>
+      this.setState({ items: response.data })
+    );
+  };
 
   // delete 함수 추가
   delete = (item) => {
-    const thisItems = this.state.items;
-    console.log("Before Update Items : ", this.state.items);
-    const newItems = thisItems.filter(e => e.id !== item.id);
-    this.setState({ items: newItems }, () => {
-      console.log("Update Items : ", this.state.items);
-    });
-  }
+    call("/todo", "DELETE", item).then((response) =>
+      this.setState({ items: response.data })
+    );
+  };
+
+  // update 함수 추가
+  update = (item) => {
+    call("/todo", "PUT", item).then((response) =>
+      this.setState({ items: response.data })
+    );
+  };
 
   render() {
     var todoItems = this.state.items.length > 0 && (
