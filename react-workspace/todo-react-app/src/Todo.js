@@ -8,7 +8,7 @@ class Todo extends React.Component {
     }
 
     render() {
-        const item = this.state.item;
+    const item = this.state.item;
     return (
         <ListItem>
             <Checkbox checked={item.done} />
