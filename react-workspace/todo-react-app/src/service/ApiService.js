@@ -12,11 +12,12 @@ export function call(api, method, request) {
     if (request) {
         options.body = JSON.stringify(request);
     }
-    return fetch(options.url, options).then((response) =>
-        response.json().then((json) => {
-            if (!response.ok){
-                return Promise.reject(json);
-            }
+    return fetch(options.url, options)
+        .then((response) =>
+            response.json().then((json) => {
+                if (!response.ok) {
+                    return Promise.reject(json);
+                }
             return json;
         })
     )
@@ -27,5 +28,15 @@ export function call(api, method, request) {
             window.location.href = "/login";
         }
         return Promise.reject(error);
+    });
+}
+
+export function signin(userDTO) {
+    return call("/auth/signin", "POST", userDTO)
+    .then((response) => {
+        if (response.token) {
+            // 토큰이 존재하는 경우 Todo 화면으로 리다이렉트
+            window.location.href="/";
+        }
     });
 }
