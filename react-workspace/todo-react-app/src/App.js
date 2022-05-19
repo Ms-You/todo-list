@@ -1,9 +1,9 @@
-import { Paper, List, Container } from "@material-ui/core";
+import React from 'react';
+import { Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography } from "@material-ui/core";
 import Todo from './Todo';
 import AddTodo from './AddTodo.js';
 import './App.css';
-import React from 'react';
-import { call } from "./service/ApiService";
+import { call, signout } from "./service/ApiService";
 
 class App extends React.Component {
   constructor(props) {
@@ -46,15 +46,36 @@ class App extends React.Component {
       <Paper style={{ margin: 16 }}>
         <List>
           {this.state.items.map((item, idx) => (
-            <Todo item={item} key={item.id} delete={this.delete} />
+            <Todo item={item} key={item.id} delete={this.delete} update={this.update} />
           ))}
         </List>
       </Paper>
     );
 
-    // add 함수 연결
+    // NavBar 추가
+    var navigationBar = (
+      <AppBar position="static">
+        <Toolbar>
+          <Grid justify="space-between" container>
+            <Grid item>
+              <Typography variant="h6">
+                오늘의 할 일
+              </Typography>
+            </Grid>
+            <Grid>
+              <Button color="inherit" onClick={signout}>
+                로그아웃
+              </Button>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    );
+
+    // add 함수 연결 및 props로 넘겨주기
     return (
       <div className='App'>
+        {navigationBar}
         <Container maxWidth="md">
           <AddTodo add={this.add} />
           <div className="TodoList">{todoItems}</div>
