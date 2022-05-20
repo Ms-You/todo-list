@@ -10,13 +10,16 @@ class App extends React.Component {
     super(props);
     this.state = { 
       items: [],
+      // 로딩 상태를 표시할 변수
+      loading: true,
     };
   }
 
   // componentDidMount 추가
+  // GET 요청이 성공적이면 loading을 false로 변경
   componentDidMount() {
     call("/todo", "GET", null).then((response) =>
-      this.setState({ items: response.data })
+      this.setState({ items: response.data, loading: false })
     );
   };
 
@@ -72,16 +75,31 @@ class App extends React.Component {
       </AppBar>
     );
 
-    // add 함수 연결 및 props로 넘겨주기
-    return (
-      <div className='App'>
+    // 로딩 중이 아닐 때 렌더링하는 부분
+    var todoListPage = (
+      <div>
         {navigationBar}
         <Container maxWidth="md">
           <AddTodo add={this.add} />
-          <div className="TodoList">{todoItems}</div>
+          <div className="TodoList">
+            {todoItems}
+          </div>
         </Container>
       </div>
     );
+
+    // 로딩 중일 때 렌더링하는 부분
+    var loadingPage = <h1> 로딩중... </h1>;
+
+    var content = loadingPage;
+    
+    // 로딩 중이 아니면 todoListPage를 선택
+    if (!this.state.loading) {
+      content = todoListPage;
+    }
+
+    // 선택한 content 렌더링
+    return <div className='App'>{content}</div>;
   }
 }
 
